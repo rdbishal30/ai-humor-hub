@@ -19,6 +19,12 @@ class AIGreeter:
             "AI Fact: Neural networks are inspired by human brain structure!",
             "Cool fact: AI can recognize cats better than it can understand sarcasm!"
         ]
+    def safe_input(self, prompt: str) -> str:
+        """Return user input or an empty string if stdin is closed."""
+        try:
+            return input(prompt)
+        except EOFError:
+            return ""
 
     def get_time_based_greeting(self):
         hour = datetime.now().hour
@@ -45,7 +51,9 @@ class AIGreeter:
         print(f"\n{random.choice(self.greetings)}")
         print(f"{self.get_time_based_greeting()}")
         
-        name = input("\nWhat's your name, human? ")
+        name = self.safe_input("\nWhat's your name, human? ")
+        if not name:
+            name = "mysterious entity"
         print(f"\nNice to meet you, {name}! 🤝")
         
         print("\nLet me share something interesting...")
@@ -53,7 +61,8 @@ class AIGreeter:
         print(random.choice(self.ai_facts))
         
         print("\nWould you like to hear a joke? (yes/no)")
-        if input().lower().startswith('y'):
+        answer = self.safe_input("")
+        if answer.lower().startswith('y'):
             print("\nHere's one for you:")
             print(self.tell_joke())
         
