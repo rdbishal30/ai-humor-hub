@@ -53,7 +53,8 @@ class AIGreeter:
         print(random.choice(self.ai_facts))
         
         print("\nWould you like to hear a joke? (yes/no)")
-        if input().lower().startswith('y'):
+        response = input().strip().lower()
+        if response.startswith('y'):
             print("\nHere's one for you:")
             print(self.tell_joke())
         
