@@ -1,6 +1,7 @@
 import random
 import time
 from datetime import datetime
+import os
 
 class AIGreeter:
     def __init__(self):
@@ -27,7 +28,15 @@ class AIGreeter:
             return ""
 
     def get_time_based_greeting(self):
-        hour = datetime.now().hour
+        # Use local time but with better timezone awareness
+        # Note: This uses system local time. In production environments,
+        # consider using timezone-aware datetime or pytz for consistent behavior
+        try:
+            hour = datetime.now().hour
+        except Exception:
+            # Fallback if there are any datetime issues
+            return "Hello! 👋"
+            
         if 5 <= hour < 12:
             return "Good morning! ☀️"
         elif 12 <= hour < 17:
@@ -45,10 +54,13 @@ class AIGreeter:
             "What did the AI say to the human? Don't worry, I've got your back... up!",
             "Why was the AI bad at football? It kept trying to download the pitch!"
         ]
+        if not jokes:
+            return "Error: No jokes available! That's... actually pretty funny in itself! 😅"
         return random.choice(jokes)
 
     def interact(self):
-        print(f"\n{random.choice(self.greetings)}")
+        greeting = random.choice(self.greetings) if self.greetings else "Hello! 🤖"
+        print(f"\n{greeting}")
         print(f"{self.get_time_based_greeting()}")
         
         name = self.safe_input("\nWhat's your name, human? ")
@@ -58,10 +70,11 @@ class AIGreeter:
         
         print("\nLet me share something interesting...")
         time.sleep(1)
-        print(random.choice(self.ai_facts))
+        fact = random.choice(self.ai_facts) if self.ai_facts else "AI is fascinating!"
+        print(fact)
         
         print("\nWould you like to hear a joke? (yes/no)")
-        answer = self.safe_input("")
+        answer = self.safe_input("Your choice: ")
         if answer.lower().startswith('y'):
             print("\nHere's one for you:")
             print(self.tell_joke())
