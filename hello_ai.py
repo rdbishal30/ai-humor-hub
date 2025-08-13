@@ -1,6 +1,6 @@
 import random
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 import os
 
 class AIGreeter:
@@ -32,7 +32,8 @@ class AIGreeter:
         # Note: This uses system local time. In production environments,
         # consider using timezone-aware datetime or pytz for consistent behavior
         try:
-            hour = datetime.now().hour
+            # Using UTC for consistent, timezone-aware time
+            hour = datetime.now(timezone.utc).hour
         except Exception:
             # Fallback if there are any datetime issues
             return "Hello! 👋"
